@@ -1,9 +1,11 @@
 package todo
+
 import (
 	"fmt"
+	"encoding/json"
+	"os"
+	
 )
-
-
 
 type Todo struct {
 	ID          int
@@ -12,19 +14,38 @@ type Todo struct {
 	Status      string
 }
 
+const todoFile = "todo.json"
 
 type TodoList struct {
 	Todos []Todo
 }
+func (t *TodoList) loadJSON() {
+	file, err := os.ReadFile(todoFile)
+	if err != nil {
+		fmt.Println("error:", err)
+		return
+	}
+
+	err = json.Unmarshal(file, &t.Todos)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+}
+
 
 func (t *TodoList) AddTodo(title, description string) {
 	fmt.Println("Adding todo...")
-	todo := Todo {
+	todo := Todo{
 		ID:          len(t.Todos) + 1,
 		Title:       title,
 		Description: description,
 		Status:      "pending",
 	}
+
+	t.loadJSON()
+
+	t.Todos = append(t.Todos, todo)
+
 	t.Todos = append(t.Todos, todo)
 	fmt.Println("Here is the added todo")
 	fmt.Println("Todo added successfully!")
@@ -37,11 +58,11 @@ func (t *TodoList) PrintAllTodos() {
 		fmt.Println("Title:", todo.Title)
 		fmt.Println("Description:", todo.Description)
 		fmt.Println("Status:", todo.Status)
-		
+
 	}
 }
 
-func (t *TodoList) UpdateTodo(id int, status, title, description string){
+func (t *TodoList) UpdateTodo(id int, status, title, description string) {
 
 	isIdFound := false
 
@@ -64,7 +85,7 @@ func (t *TodoList) UpdateTodo(id int, status, title, description string){
 
 }
 
-func (t *TodoList ) DeleteTodo(id int){
+func (t *TodoList) DeleteTodo(id int) {
 	deletedId := -1
 	for i, todo := range t.Todos {
 		if todo.ID == id {
@@ -72,7 +93,7 @@ func (t *TodoList ) DeleteTodo(id int){
 			break
 		}
 	}
-	
+
 	if deletedId == -1 {
 		fmt.Println("Deleted ID not Found")
 		return
@@ -80,18 +101,3 @@ func (t *TodoList ) DeleteTodo(id int){
 	t.Todos = append(t.Todos[:deletedId], t.Todos[deletedId+1:]...)
 	fmt.Println("Todo deleted succesfull")
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
