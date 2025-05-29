@@ -20,6 +20,7 @@ func main() {
 	updateTitle := updateCmd.String("title", "", "Title for update")
 	updateDescription := updateCmd.String("description", "", "Description for update")
 	updateStatus := updateCmd.String("status", "", "Status for update")
+	updateId := updateCmd.Int("id", -1, "")
 
 	flag.Parse()
 
@@ -49,11 +50,11 @@ func main() {
 
 	case "update":
 		updateCmd.Parse(flag.Args()[1:])
-		if *updateTitle == "" || *updateDescription == "" {
+		if *updateTitle == "" || *updateDescription == "" || *updateId == -1 {
 			fmt.Println("Please provide both title and description for update")
 			os.Exit(1)
 		}
-		todoList.UpdateTodo(*deleteId, *updateStatus, *updateTitle, *updateDescription)
+		todoList.UpdateTodo(*updateId, *updateStatus, *updateTitle, *updateDescription)
 
 	case "alltodo":
 		todoList.PrintAllTodos()
