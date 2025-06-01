@@ -44,7 +44,7 @@ func (t *TodoList) AddTodo(title, description string) {
 	fmt.Println("Adding todo...")
 
 	t.loadJSON()
-	
+
 	todo := Todo{
 		ID:          len(t.Todos) + 1,
 		Title:       title,
