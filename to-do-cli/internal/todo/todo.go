@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Todo struct {
@@ -58,13 +59,17 @@ func (t *TodoList) AddTodo(title, description string) {
 }
 
 func (t *TodoList) PrintAllTodos() {
-	fmt.Println("Here is All Todo............")
-	for _, todo := range t.Todos {
-		fmt.Println("ID:", todo.ID)
-		fmt.Println("Title:", todo.Title)
-		fmt.Println("Description:", todo.Description)
-		fmt.Println("Status:", todo.Status)
+	t.loadJSON()
+	fmt.Println("Here are all Todos:\n")
 
+	// Print header
+	fmt.Printf("%-5s %-20s %-30s %-10s\n", "ID", "Title", "Description", "Status")
+	fmt.Println(strings.Repeat("-", 75))
+
+	// Print each todo in formatted rows
+	for _, todo := range t.Todos {
+		fmt.Printf("%-5d %-20s %-30s %-10s\n",
+			todo.ID, todo.Title, todo.Description, todo.Status)
 	}
 }
 
