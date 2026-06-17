@@ -2,20 +2,16 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
-
+	"bookstore-api/internal/config"
 	"github.com/go-chi/chi/v5"
-	"github.com/joho/godotenv"
 )
 
 
 func main() {
-	godotenv.Load()
+	cfg, err := config.Load()
 
-	port := os.Getenv("SERVER_PORT")
-
-	if port == ""{
-		port = "8000"
+	if err != nil{
+		fmt.Println("Error loading in config:", err)
 	}
 
 	r := chi.NewRouter()
@@ -24,8 +20,8 @@ func main() {
 		w.Write([]byte("ok"))
 	})
 
-	fmt.Printf("Server starting on port %s\n", port)
+	fmt.Printf("Server starting on port %s\n", cfg.Serverport)
 
-	http.ListenAndServe(":"+port, r)
+	http.ListenAndServe(":"+cfg.Serverport, r)
 
 }
